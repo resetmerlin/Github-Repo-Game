@@ -1,1 +1,1 @@
-export * from './collisions';
+export * from './collisions.mjs';
