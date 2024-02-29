@@ -17,9 +17,8 @@ export class Movement {
 
     if (this.#moving)
       this.#movables.forEach((movable) => {
-        if (movable?.position) {
-          movable.position.y += 3;
-        } else movable.movePositionY = 3;
+        movable.moveBoundaryPositionY = 3;
+        movable.movePositionY = 3;
       });
   }
 
@@ -28,9 +27,8 @@ export class Movement {
 
     if (this.#moving)
       this.#movables.forEach((movable) => {
-        if (movable?.position) {
-          movable.position.y -= 3;
-        } else movable.movePositionY = -3;
+        movable.moveBoundaryPositionY = -3;
+        movable.movePositionY = -3;
       });
   }
 
@@ -39,9 +37,8 @@ export class Movement {
 
     if (this.#moving)
       this.#movables.forEach((movable) => {
-        if (movable?.position) {
-          movable.position.x += 3;
-        } else movable.movePositionX = 3;
+        movable.moveBoundaryPositionX = +3;
+        movable.movePositionX = 3;
       });
   }
 
@@ -50,47 +47,43 @@ export class Movement {
 
     if (this.#moving)
       this.#movables.forEach((movable) => {
-        if (movable?.position) {
-          movable.position.x -= 3;
-        } else movable.movePositionX = -3;
+        movable.moveBoundaryPositionX = -3;
+        movable.movePositionX = -3;
       });
   }
 
   move({ x = 0, y = 0 }) {
     for (let i = 0; i < this.#boundaries.length; i++) {
       const boundary = this.#boundaries[i];
-      const boundaryRectangle = {
-        ...boundary,
-        position: {
-          x: boundary.boundaryPostionX + x,
-          y: boundary.boundaryPostionY + y,
-        },
-      };
 
-      if (this.isColliding(this.#player, boundaryRectangle)) {
+      if (
+        this.isColliding(
+          this.#player,
+          boundary,
+          boundary.boundaryPostionX + x,
+          boundary.boundaryPostionY + y
+        )
+      ) {
         this.#moving = false;
         break;
       }
     }
   }
 
-  isColliding(playerRectangle, boundaryRectangle) {
-    if (!(playerRectangle instanceof Player)) return false;
+  isColliding(playerRectangle, boundaryRectangle, positionX, positionY) {
     const IsPlayerTopColliding =
       playerRectangle.playerPositionY <=
-      boundaryRectangle.position.y + boundaryRectangle.height;
+      positionY + boundaryRectangle.boundaryHeight;
 
     const IsPlayerBottomColliding =
-      playerRectangle.playerPositionY + playerRectangle.height >=
-      boundaryRectangle.position.y;
+      playerRectangle.playerPositionY + playerRectangle.height >= positionY;
 
     const IsPlayerLeftColliding =
-      playerRectangle.playerPositionX + playerRectangle.width >=
-      boundaryRectangle.position.x;
+      playerRectangle.playerPositionX + playerRectangle.width >= positionX;
 
     const IsPlayerRightColliding =
       playerRectangle.playerPositionX <=
-      boundaryRectangle.position.x + boundaryRectangle.width;
+      positionX + boundaryRectangle.boundaryWidth;
 
     return (
       IsPlayerTopColliding &&

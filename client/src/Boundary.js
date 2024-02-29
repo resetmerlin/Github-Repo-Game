@@ -18,7 +18,7 @@ export class Boundary {
   }
 
   draw() {
-    this.#canvas2d.fillStyle = "rgba(255,0,0,0.0)";
+    this.#canvas2d.fillStyle = "rgba(255,1,1,1.1)";
 
     this.#canvas2d.fillRect(
       this.#position.x,
@@ -34,5 +34,21 @@ export class Boundary {
 
   get boundaryPostionY() {
     return this.#position.y;
+  }
+
+  get boundaryHeight() {
+    return this.#height;
+  }
+
+  get boundaryWidth() {
+    return this.#width;
+  }
+
+  set moveBoundaryPositionX(amount) {
+    this.#position.x += amount;
+  }
+
+  set moveBoundaryPositionY(amount) {
+    this.#position.y += amount;
   }
 }
