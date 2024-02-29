@@ -5,6 +5,7 @@ import {
   Frames,
   Player,
   ImageInstance,
+  homeCollisions,
 } from "./src";
 
 const canvas = document.querySelector("#map");
@@ -21,9 +22,10 @@ const offset = {
   y: -500,
 };
 
-const map = new Map({ collisions, offset, canvas2d });
+const map = new Map({ collisions, offset, canvas2d, homeCollisions });
 
 const boundaries = map.getBoundaries;
+const homeBoundaries = map.getHomeBoundaries;
 
 const playerDownImage = new ImageInstance("../img/player/playerDown.png");
 const playerUpImage = new ImageInstance("../img/player/playerUp.png");
@@ -87,7 +89,7 @@ const keys = {
 // key pressed, need to go to some direction
 // Need to get the value the current direction
 
-const movables = [background, ...boundaries, foreground];
+const movables = [background, ...boundaries, foreground, ...homeBoundaries];
 
 function animate() {
   window.requestAnimationFrame(animate);
@@ -97,6 +99,10 @@ function animate() {
 
   /** Code for drawing boundary and detecting boundary */
   boundaries.forEach((boundary) => {
+    boundary.draw();
+  });
+
+  homeBoundaries.forEach((boundary) => {
     boundary.draw();
   });
 
