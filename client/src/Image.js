@@ -1,20 +1,28 @@
-export class ImageMaker {
+export class ImageInstance {
   #image = new Image();
-  constructor(src) {
+  #frames;
+  constructor(src, frames) {
     this.#image.src = src;
+    this.#frames = frames;
   }
-  get image() {
+
+  onload() {
+    this.#image.onload = () => {
+      this.width = this.#image.width / this.#frames.max;
+      this.height = this.#image.height;
+    };
+  }
+  get imageProperty() {
     return this.#image;
   }
-}
-
-export class ImageInstance {
-  image = new Image();
-  constructor(src) {
-    this.image.src = src;
+  get imageWidth() {
+    return this.#image.width;
+  }
+  get imageHeight() {
+    return this.#image.height;
   }
 
-  get imageProperty() {
-    return this.image;
+  set changeImage(image) {
+    this.#image = image;
   }
 }
