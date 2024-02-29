@@ -1,5 +1,12 @@
-import { collisions, Movement, Map, ImageMaker, Frames, Player } from "./src";
-/** 전역 객체 */
+import {
+  collisions,
+  Movement,
+  Map,
+  Frames,
+  Player,
+  ImageInstance,
+} from "./src";
+
 const canvas = document.querySelector("#map");
 const canvas2d = canvas.getContext("2d");
 
@@ -16,14 +23,12 @@ const offset = {
 
 const map = new Map({ collisions, offset, canvas2d });
 
-map.setup();
-
 const boundaries = map.getBoundaries;
 
-const playerDownImage = new ImageMaker("../img/player/playerDown.png");
-const playerUpImage = new ImageMaker("../img/player/playerUp.png");
-const playerRightImage = new ImageMaker("../img/player/playerRight.png");
-const playerLeftImage = new ImageMaker("../img/player/playerLeft.png");
+const playerDownImage = new ImageInstance("../img/player/playerDown.png");
+const playerUpImage = new ImageInstance("../img/player/playerUp.png");
+const playerRightImage = new ImageInstance("../img/player/playerRight.png");
+const playerLeftImage = new ImageInstance("../img/player/playerLeft.png");
 
 const playerWidth = 192;
 const playerHeight = 68;
@@ -38,10 +43,10 @@ const player = new Player({
     max: 4,
   },
   sprites: {
-    up: playerUpImage.image,
-    down: playerDownImage.image,
-    left: playerLeftImage.image,
-    right: playerRightImage.image,
+    up: playerUpImage.imageProperty,
+    down: playerDownImage.imageProperty,
+    left: playerLeftImage.imageProperty,
+    right: playerRightImage.imageProperty,
   },
   canvas2d,
 });
