@@ -71,6 +71,15 @@ const foreground = new Frames({
   canvas2d,
 });
 
+const homeBackground = new Frames({
+  position: {
+    x: 0,
+    y: 0,
+  },
+  image: "../img/Home Map.png",
+  canvas2d,
+});
+
 const keys = {
   w: {
     pressed: false,
@@ -86,13 +95,14 @@ const keys = {
   },
 };
 
+const homeEntered = false;
+
 // key pressed, need to go to some direction
 // Need to get the value the current direction
-
 const movables = [background, ...boundaries, foreground, ...homeBoundaries];
 
 function animate() {
-  window.requestAnimationFrame(animate);
+  const animationId = window.requestAnimationFrame(animate);
 
   /** Draw Background */
   background.draw();
@@ -109,10 +119,21 @@ function animate() {
   player.draw();
 
   let moving = true;
+
   player.stopMovement();
 
   foreground.draw();
-  const movement = new Movement({ boundaries, player, movables, moving });
+
+  const movement = new Movement({
+    boundaries,
+    homeBoundaries,
+    player,
+    movables,
+    moving,
+    homeEntered,
+    animationId,
+    homeBackground,
+  });
 
   if (keys.w.pressed) {
     player.moveUp();
