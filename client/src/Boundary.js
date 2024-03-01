@@ -18,7 +18,7 @@ export class Boundary {
   }
 
   draw() {
-    this.#canvas2d.fillStyle = "rgba(255,1,1,1.1)";
+    this.#canvas2d.fillStyle = "rgba(255,0,0,0.0)";
 
     this.#canvas2d.fillRect(
       this.#position.x,
