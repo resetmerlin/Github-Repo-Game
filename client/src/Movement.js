@@ -1,15 +1,33 @@
-import { Player } from "./Frames";
+import gsap from "gsap";
 
 export class Movement {
   #boundaries;
   #player;
   #movables;
   #moving;
-  constructor({ boundaries, player, movables, moving }) {
+  #homeBoundaries;
+  #homeEntered;
+  #animationId;
+  #homeBackground;
+
+  constructor({
+    boundaries,
+    homeBoundaries,
+    player,
+    movables,
+    moving,
+    homeEntered,
+    animationId,
+    homeBackground,
+  }) {
     this.#boundaries = boundaries;
     this.#player = player;
     this.#movables = movables;
     this.#moving = moving;
+    this.#homeBoundaries = homeBoundaries;
+    this.#homeEntered = homeEntered;
+    this.#animationId = animationId;
+    this.#homeBackground = homeBackground;
   }
 
   moveUp() {
@@ -68,6 +86,55 @@ export class Movement {
         break;
       }
     }
+
+    if (this.#homeEntered) return;
+
+    for (let i = 0; i < this.#homeBoundaries.length; i++) {
+      const boundary = this.#homeBoundaries[i];
+      if (
+        this.isColliding(
+          this.#player,
+          boundary,
+          boundary.boundaryPostionX + x,
+          boundary.boundaryPostionY + y
+        )
+      ) {
+        this.#homeEntered = true;
+
+        window.cancelAnimationFrame(this.#animationId);
+
+        // Activate Animation
+        // Activate Animation
+        gsap.to("#overlappingDiv", {
+          opacity: 1,
+          yoyo: true,
+          duration: 0.4,
+          onComplete: () => {
+            // Use arrow function here
+            gsap.to("#overlappingDiv", {
+              opacity: 1,
+              duration: 0.4,
+              onComplete: () => {
+                // And here as well
+                this.animateHomeEntered(); // 'this' now correctly refers to the Movement instance
+
+                gsap.to("#overlappingDiv", {
+                  opacity: 0,
+                  duration: 0.4,
+                });
+              },
+            });
+          },
+        });
+
+        break;
+      }
+    }
+  }
+
+  animateHomeEntered() {
+    window.requestAnimationFrame(this.animateHomeEntered.bind(this));
+    this.#homeBackground.draw();
   }
 
   isColliding(playerRectangle, boundaryRectangle, positionX, positionY) {
